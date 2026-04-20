@@ -1,0 +1,11 @@
+//Question 3 — which machines triggered the most high severity security alerts?
+TitanShield_SecurityAlerts
+| where severity == "high"
+| extend indicators_str = tostring(indicators)
+| extend hostname = extract("'hostname': '([^']+)'", 1, indicators_str)
+| where isnotempty(hostname)
+| summarize count() by hostname
+| order by count_ desc
+
+//"111 unique machines triggered high severity security alerts. 
+//BRQZ-DESKTOP, E49P-MACHINE, and HNQF-LAPTOP were the most affected with 3 alerts each, indicating possible malware infection or active compromise."
