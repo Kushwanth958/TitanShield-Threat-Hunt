@@ -1,0 +1,8 @@
+//What hour do most failed logins happen? You need to extract the hour from timestamp and count by it.
+TitanShield_AuthenticationEvents
+|where src_ip !contains "10.10"
+| where result =="Failed Login"
+| summarize  count()by  failed_hour = datetime_part("hour", timestamp)
+|order by count_ desc 
+
+//"External attack attempts peak at 2PM (623 attempts) and 1PM (616 attempts), suggesting attackers deliberately target business hours to blend in with legitimate traffic and evade detection."
