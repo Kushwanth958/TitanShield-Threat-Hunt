@@ -1,0 +1,16 @@
+//Find users who had a security alert AND a failed login on the same day.
+let auth_failure =
+    TitanShield_AuthenticationEvents
+    | where result == "Failed Login"
+    | project username, failday = startofday(timestamp);
+TitanShield_SecurityAlerts
+| extend indicators_str = tostring(indicators)
+| extend username = extract("'username': '([^']+)'", 1, indicators_str)
+| where isnotempty(username)
+| project username, alertday = startofday(timestamp), alert_type
+| join kind=inner auth_failure on username
+| where alertday == failday
+| distinct username, alertday, alert_type
+| order by alertday asc
+
+//"User olmartinez1 was simultaneously targeted by a phishing email and brute force login attempts on July 29, 2024. This coordinated attack pattern indicates a targeted threat actor focusing on this specific account."
