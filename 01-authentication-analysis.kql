@@ -1,0 +1,4 @@
+//How many total authentication events exist and what's the split between failed and successful?
+TitanShield_AuthenticationEvents
+|summarize failure = countif(result == "Failed Login"), 
+            Success = countif(result =="Successful Login")
