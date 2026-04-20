@@ -1,0 +1,8 @@
+// Detection: Most Targeted External Accounts
+// Purpose: Identify which user accounts are most frequently attacked from external IPs
+// Table: TitanShield_AuthenticationEvents
+//which 5 usernames were targeted most by external attackers?
+TitanShield_AuthenticationEvents
+| where src_ip !contains "10.10"
+|summarize count()by username
+|order by count_ desc 
